@@ -13,14 +13,24 @@ SmartLocation.with(context).location()
     .start(new OnLocationUpdatedListener() { ... });
 If you just want to get a single location (not periodic) you can just use the oneFix modifier. Example:
 
+
 SmartLocation.with(context).location()
     .oneFix()
     .start(new OnLocationUpdatedListener() { ... });
+    
+    
+    
+    
 Stopping
 
 For stopping the location just use the stop method.
 
+
+
 SmartLocation.with(context).location().stop();
+
+
+
 Status
 
 You can get some information about the current status of location providers to know if you will be able to use the location providers.
