@@ -1,0 +1,69 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.3.2'
+    }
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+
+version '1.0.0'
+group 'com.cz.smartlocation'
+
+dependencies {
+    repositories {
+        mavenCentral()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+    }
+    compile 'com.google.android.gms:play-services-location:9.8.0'
+    compile 'com.android.support:support-annotations:'+project.SUPPORT_VERSION
+    provided 'io.reactivex:rxjava:1.1.7'
+    provided 'io.reactivex:rxandroid:1.2.0'
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.robolectric:robolectric:3.1'
+    testCompile 'org.robolectric:robolectric-shadows:3.1'
+    testCompile 'org.mockito:mockito-core:2.0.86-beta'
+
+}
+
+android {
+    compileSdkVersion project.ANDROID_BUILD_SDK_VERSION
+    buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
+
+    buildTypes {
+        defaultConfig {
+            minSdkVersion  project.ANDROID_BUILD_MIN_SDK_VERSION
+            targetSdkVersion project.ANDROID_BUILD_TARGET_SDK_VERSION
+            versionCode 1
+            versionName version
+        }
+    }
+
+}
+
+android.libraryVariants
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifact "build/libs/SmartLocation-${version}.aar"
+            artifactId 'library'
+        }
+    }
+}
+
+def isReleaseBuild() {
+    return version.contains("SNAPSHOT") == false
+}
+
+signing {
+    required { isReleaseBuild() && gradle.taskGraph.hasTask("uploadArchives") }
+    sign configurations.archives
+}
+
+
